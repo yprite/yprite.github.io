@@ -317,6 +317,39 @@
         line-height: 1.55;
       }
 
+      .tool {
+        display: grid;
+        grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.1fr);
+        gap: 20px;
+        align-items: start;
+      }
+
+      .tool-panel {
+        display: grid;
+        gap: 14px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        padding: 20px;
+      }
+
+      .tool-output {
+        min-height: 230px;
+        white-space: pre-wrap;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #f6f8fa;
+        padding: 16px;
+        color: var(--ink);
+        line-height: 1.68;
+      }
+
+      .tool-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
       footer {
         padding: 28px 0 40px;
         color: var(--muted);
@@ -326,7 +359,8 @@
       @media (max-width: 820px) {
         .hero,
         .cta,
-        .pilot {
+        .pilot,
+        .tool {
           grid-template-columns: 1fr;
         }
 
@@ -374,6 +408,7 @@
           </p>
           <div class="hero-actions">
             <a class="button" href="#pilot-form">초기 테스트 신청</a>
+            <a class="button secondary" href="#message-tool">문자 생성</a>
             <a class="button secondary" href="#pricing">가격 보기</a>
           </div>
           <div class="price-row" aria-label="핵심 조건">
@@ -437,6 +472,44 @@
         </div>
       </section>
 
+      <section id="message-tool">
+        <div class="wrap tool">
+          <div class="tool-panel">
+            <h2>고객 일정 문자 생성</h2>
+            <div class="field">
+              <label for="tool-company">업체명</label>
+              <input id="tool-company" value="일정비서 홈케어" />
+            </div>
+            <div class="field">
+              <label for="tool-service">서비스명</label>
+              <input id="tool-service" value="에어컨 청소" />
+            </div>
+            <div class="field">
+              <label for="tool-slot-1">후보 시간 1</label>
+              <input id="tool-slot-1" value="내일 오후 2시" />
+            </div>
+            <div class="field">
+              <label for="tool-slot-2">후보 시간 2</label>
+              <input id="tool-slot-2" value="모레 오전 10시" />
+            </div>
+            <div class="field">
+              <label for="tool-slot-3">후보 시간 3</label>
+              <input id="tool-slot-3" value="이번 주 토요일 오후 1시" />
+            </div>
+          </div>
+
+          <div class="tool-panel">
+            <h2>바로 보낼 문구</h2>
+            <div class="tool-output" id="message-output" aria-live="polite"></div>
+            <div class="tool-actions">
+              <button class="button" id="copy-message" type="button">문구 복사</button>
+              <a class="button secondary" href="#pilot-form">자동 조율 신청</a>
+            </div>
+            <p class="fineprint">직접 복사해 보내는 방식으로 먼저 써보고, 반복 조율은 월 990원 자동화로 넘길 수 있습니다.</p>
+          </div>
+        </div>
+      </section>
+
       <section id="pricing">
         <div class="wrap">
           <div class="cta">
@@ -493,6 +566,49 @@
     </footer>
     <script>
       const form = document.querySelector("#signup-form");
+      const messageFields = [
+        document.querySelector("#tool-company"),
+        document.querySelector("#tool-service"),
+        document.querySelector("#tool-slot-1"),
+        document.querySelector("#tool-slot-2"),
+        document.querySelector("#tool-slot-3"),
+      ];
+      const messageOutput = document.querySelector("#message-output");
+      const copyButton = document.querySelector("#copy-message");
+
+      const buildMessage = () => {
+        const [company, service, slot1, slot2, slot3] = messageFields.map((field) => field.value.trim());
+        const slots = [slot1, slot2, slot3].filter(Boolean).map((slot, index) => `${index + 1}. ${slot}`);
+        const slotText = slots.length > 0 ? slots.join("\n") : "1. 내일 오후\n2. 모레 오전";
+
+        return [
+          `안녕하세요. ${company || "방문 서비스"}입니다.`,
+          `${service || "방문 서비스"} 일정 조율차 연락드립니다.`,
+          "",
+          "아래 시간 중 가능하신 번호를 답장으로 보내주세요.",
+          slotText,
+          "",
+          "다른 시간이 편하시면 가능한 시간대를 함께 보내주셔도 됩니다.",
+        ].join("\n");
+      };
+
+      const updateMessage = () => {
+        messageOutput.textContent = buildMessage();
+        copyButton.textContent = "문구 복사";
+      };
+
+      messageFields.forEach((field) => field.addEventListener("input", updateMessage));
+
+      copyButton.addEventListener("click", async () => {
+        const text = buildMessage();
+
+        try {
+          await navigator.clipboard.writeText(text);
+          copyButton.textContent = "복사 완료";
+        } catch {
+          window.prompt("문구를 복사하세요.", text);
+        }
+      });
 
       form.addEventListener("submit", (event) => {
         event.preventDefault();
@@ -511,6 +627,8 @@
         const subject = encodeURIComponent("일정비서 월 990원 테스트 신청");
         window.location.href = `mailto:yprite0128@gmail.com?subject=${subject}&body=${encodeURIComponent(body)}`;
       });
+
+      updateMessage();
     </script>
   </body>
 </html>
