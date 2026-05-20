@@ -500,6 +500,10 @@
               <input id="tool-service" value="에어컨 청소" />
             </div>
             <div class="field">
+              <label for="tool-phone">고객 연락처</label>
+              <input id="tool-phone" value="01012345678" inputmode="tel" />
+            </div>
+            <div class="field">
               <label for="tool-slot-1">후보 시간 1</label>
               <input id="tool-slot-1" value="내일 오후 2시" />
             </div>
@@ -522,6 +526,7 @@
             <div class="tool-output" id="message-output" aria-live="polite"></div>
             <div class="tool-actions">
               <button class="button" id="copy-message" type="button">문구 복사</button>
+              <a class="button secondary" id="sms-message" href="#">SMS로 열기</a>
               <a class="button secondary" href="#pilot-form">자동 조율 신청</a>
             </div>
             <p class="fineprint">직접 복사해 보내는 방식으로 먼저 써보고, 반복 조율은 월 990원 자동화로 넘길 수 있습니다.</p>
@@ -529,6 +534,7 @@
             <div class="tool-output compact" id="confirm-output" aria-live="polite"></div>
             <div class="tool-actions">
               <button class="button secondary" id="copy-confirm" type="button">확정 문구 복사</button>
+              <a class="button secondary" id="sms-confirm" href="#">확정 SMS로 열기</a>
             </div>
           </div>
         </div>
@@ -603,6 +609,7 @@
       const messageFields = [
         document.querySelector("#tool-company"),
         document.querySelector("#tool-service"),
+        document.querySelector("#tool-phone"),
         document.querySelector("#tool-slot-1"),
         document.querySelector("#tool-slot-2"),
         document.querySelector("#tool-slot-3"),
@@ -612,9 +619,18 @@
       const confirmOutput = document.querySelector("#confirm-output");
       const copyButton = document.querySelector("#copy-message");
       const copyConfirmButton = document.querySelector("#copy-confirm");
+      const smsMessageLink = document.querySelector("#sms-message");
+      const smsConfirmLink = document.querySelector("#sms-confirm");
+
+      const cleanPhone = (value) => value.replace(/[^\d+]/g, "");
+
+      const buildSmsHref = (phone, body) => {
+        const separator = /iPad|iPhone|iPod/.test(navigator.userAgent) ? "&" : "?";
+        return `sms:${cleanPhone(phone)}${separator}body=${encodeURIComponent(body)}`;
+      };
 
       const buildMessage = () => {
-        const [company, service, slot1, slot2, slot3] = messageFields.map((field) => field.value.trim());
+        const [company, service, , slot1, slot2, slot3] = messageFields.map((field) => field.value.trim());
         const slots = [slot1, slot2, slot3].filter(Boolean).map((slot, index) => `${index + 1}. ${slot}`);
         const slotText = slots.length > 0 ? slots.join("\n") : "1. 내일 오후\n2. 모레 오전";
 
@@ -630,7 +646,7 @@
       };
 
       const pickConfirmedSlot = () => {
-        const [, , slot1, slot2, slot3, reply] = messageFields.map((field) => field.value.trim());
+        const [, , , slot1, slot2, slot3, reply] = messageFields.map((field) => field.value.trim());
         const slots = [slot1, slot2, slot3].filter(Boolean);
         const numberMatch = reply.match(/[1-3]/);
 
@@ -655,8 +671,11 @@
       };
 
       const updateMessage = () => {
+        const phone = messageFields[2].value.trim();
         messageOutput.textContent = buildMessage();
         confirmOutput.textContent = buildConfirmation();
+        smsMessageLink.href = buildSmsHref(phone, buildMessage());
+        smsConfirmLink.href = buildSmsHref(phone, buildConfirmation());
         copyButton.textContent = "문구 복사";
         copyConfirmButton.textContent = "확정 문구 복사";
       };
