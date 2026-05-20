@@ -361,6 +361,32 @@
         gap: 10px;
       }
 
+      .roi {
+        display: grid;
+        grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.1fr);
+        gap: 20px;
+        align-items: stretch;
+      }
+
+      .metric-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .metric {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        padding: 16px;
+      }
+
+      .metric strong {
+        display: block;
+        margin-top: 6px;
+        font-size: 1.45rem;
+      }
+
       footer {
         padding: 28px 0 40px;
         color: var(--muted);
@@ -371,11 +397,13 @@
         .hero,
         .cta,
         .pilot,
-        .tool {
+        .tool,
+        .roi {
           grid-template-columns: 1fr;
         }
 
-        .grid {
+        .grid,
+        .metric-grid {
           grid-template-columns: 1fr;
         }
 
@@ -540,6 +568,45 @@
         </div>
       </section>
 
+      <section id="roi">
+        <div class="wrap roi">
+          <div class="tool-panel">
+            <h2>월 990원 계산</h2>
+            <div class="field">
+              <label for="roi-jobs">하루 조율 건수</label>
+              <input id="roi-jobs" type="number" min="1" value="5" />
+            </div>
+            <div class="field">
+              <label for="roi-minutes">건당 전화·문자 왕복 시간</label>
+              <input id="roi-minutes" type="number" min="1" value="6" />
+            </div>
+            <div class="field">
+              <label for="roi-days">월 작업일</label>
+              <input id="roi-days" type="number" min="1" value="22" />
+            </div>
+          </div>
+
+          <div class="tool-panel">
+            <h2>절약되는 시간</h2>
+            <div class="metric-grid">
+              <div class="metric">
+                월 조율 시간
+                <strong id="roi-hours">11시간</strong>
+              </div>
+              <div class="metric">
+                1건당 이용료
+                <strong id="roi-cost">9원</strong>
+              </div>
+            </div>
+            <p class="fineprint" id="roi-copy">하루 5건이면 월 110건 조율입니다. 일정비서는 월 990원이라 1건당 약 9원입니다.</p>
+            <div class="tool-actions">
+              <a class="button" href="#pilot-form">월 990원 테스트 신청</a>
+              <a class="button secondary" href="#message-tool">문자로 먼저 써보기</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="pricing">
         <div class="wrap">
           <div class="cta">
@@ -621,6 +688,14 @@
       const copyConfirmButton = document.querySelector("#copy-confirm");
       const smsMessageLink = document.querySelector("#sms-message");
       const smsConfirmLink = document.querySelector("#sms-confirm");
+      const roiFields = [
+        document.querySelector("#roi-jobs"),
+        document.querySelector("#roi-minutes"),
+        document.querySelector("#roi-days"),
+      ];
+      const roiHours = document.querySelector("#roi-hours");
+      const roiCost = document.querySelector("#roi-cost");
+      const roiCopy = document.querySelector("#roi-copy");
 
       const cleanPhone = (value) => value.replace(/[^\d+]/g, "");
 
@@ -680,7 +755,20 @@
         copyConfirmButton.textContent = "확정 문구 복사";
       };
 
+      const updateRoi = () => {
+        const [jobs, minutes, days] = roiFields.map((field) => Math.max(Number(field.value) || 0, 1));
+        const monthlyJobs = jobs * days;
+        const monthlyMinutes = monthlyJobs * minutes;
+        const hours = Math.round((monthlyMinutes / 60) * 10) / 10;
+        const costPerJob = Math.max(Math.round(990 / monthlyJobs), 1);
+
+        roiHours.textContent = `${hours}시간`;
+        roiCost.textContent = `${costPerJob.toLocaleString("ko-KR")}원`;
+        roiCopy.textContent = `하루 ${jobs}건이면 월 ${monthlyJobs.toLocaleString("ko-KR")}건 조율입니다. 일정비서는 월 990원이라 1건당 약 ${costPerJob.toLocaleString("ko-KR")}원입니다.`;
+      };
+
       messageFields.forEach((field) => field.addEventListener("input", updateMessage));
+      roiFields.forEach((field) => field.addEventListener("input", updateRoi));
 
       copyButton.addEventListener("click", async () => {
         const text = buildMessage();
@@ -723,6 +811,7 @@
       });
 
       updateMessage();
+      updateRoi();
     </script>
   </body>
 </html>
