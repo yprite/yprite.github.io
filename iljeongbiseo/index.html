@@ -256,6 +256,37 @@
         justify-content: flex-end;
       }
 
+      .reply-card {
+        display: grid;
+        gap: 12px;
+        margin-top: 18px;
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--soft);
+      }
+
+      .reply-card p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.58;
+      }
+
+      .reply-phrase {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .reply-phrase strong {
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        font-size: 1.05rem;
+      }
+
       .pilot {
         display: grid;
         grid-template-columns: minmax(0, 0.92fr) minmax(320px, 1.08fr);
@@ -613,6 +644,13 @@
             <div>
               <h2>초기 테스트 15곳: 월 990원</h2>
               <p>첫 달은 세팅과 실제 고객 1건 조율까지 같이 확인합니다. 계속 쓰기로 하면 월 990원으로 유지하고, 결제 안내는 답장으로 보내드립니다.</p>
+              <div class="reply-card">
+                <p>메일을 받고 들어오셨다면 아래 문구만 답장해도 테스트 세팅을 시작할 수 있습니다.</p>
+                <div class="reply-phrase">
+                  <strong id="reply-text">테스트 희망</strong>
+                  <button class="button secondary" id="copy-reply" type="button">답장 문구 복사</button>
+                </div>
+              </div>
             </div>
             <div class="cta-actions">
               <a class="button secondary" href="#pilot-form">테스트 신청</a>
@@ -686,6 +724,8 @@
       const confirmOutput = document.querySelector("#confirm-output");
       const copyButton = document.querySelector("#copy-message");
       const copyConfirmButton = document.querySelector("#copy-confirm");
+      const copyReplyButton = document.querySelector("#copy-reply");
+      const replyText = document.querySelector("#reply-text");
       const smsMessageLink = document.querySelector("#sms-message");
       const smsConfirmLink = document.querySelector("#sms-confirm");
       const roiFields = [
@@ -787,6 +827,17 @@
         try {
           await navigator.clipboard.writeText(text);
           copyConfirmButton.textContent = "복사 완료";
+        } catch {
+          window.prompt("문구를 복사하세요.", text);
+        }
+      });
+
+      copyReplyButton.addEventListener("click", async () => {
+        const text = replyText.textContent.trim();
+
+        try {
+          await navigator.clipboard.writeText(text);
+          copyReplyButton.textContent = "복사 완료";
         } catch {
           window.prompt("문구를 복사하세요.", text);
         }
