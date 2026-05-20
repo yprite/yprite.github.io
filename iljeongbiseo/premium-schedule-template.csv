@@ -1,0 +1,4 @@
+customer_name,phone,service_type,requested_date,confirmed_date,confirmed_time,address,reminder_sent,status,notes
+김민수,010-0000-0001,사무실 정기청소,2026-05-23,2026-05-24,09:30,서울시 강남구 테헤란로 100,Y,confirmed,D-1 안내 완료
+박지현,010-0000-0002,에어컨 분해청소,2026-05-25,2026-05-26,14:00,성남시 분당구 판교로 200,N,pending,고객 2차 희망시간 대기
+최현우,010-0000-0003,건물 공용부 청소,2026-05-27,2026-05-28,10:00,서울시 중랑구 용마산로 300,Y,confirmed,월 정기 방문 2회차
