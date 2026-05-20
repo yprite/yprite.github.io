@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>청년사무실청소 일정비서 샘플</title>
+    <style>
+      :root { --ink: #151b26; --muted: #526070; --line: #d8e0e7; --accent: #0f766e; --soft: #eef7f4; --paper: #ffffff; }
+      * { box-sizing: border-box; }
+      body { margin: 0; background: #f7f9fb; color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .wrap { width: min(940px, calc(100% - 32px)); margin: 0 auto; }
+      header, section { padding: 32px 0; }
+      .hero, .panel { border: 1px solid var(--line); border-radius: 8px; background: var(--paper); padding: 24px; }
+      .hero { display: grid; gap: 16px; margin-top: 20px; }
+      h1, h2, p { margin-top: 0; }
+      h1 { margin-bottom: 6px; font-size: clamp(1.8rem, 4vw, 3rem); line-height: 1.15; }
+      h2 { font-size: 1.25rem; }
+      .lead, p, li { color: var(--muted); line-height: 1.62; }
+      .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+      .message { white-space: pre-wrap; border: 1px solid var(--line); border-radius: 8px; background: #fff; padding: 16px; line-height: 1.65; }
+      .highlight { border-color: var(--accent); background: var(--soft); }
+      table { width: 100%; border-collapse: collapse; background: #fff; }
+      th, td { border: 1px solid var(--line); padding: 10px; text-align: left; vertical-align: top; }
+      th { background: var(--soft); }
+      .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+      .button { display: inline-flex; align-items: center; min-height: 44px; border: 1px solid var(--ink); border-radius: 8px; padding: 0 16px; color: #fff; background: var(--ink); font-weight: 800; text-decoration: none; }
+      .button.secondary { color: var(--ink); background: #fff; }
+      @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
+    </style>
+  </head>
+  <body>
+    <header><div class="wrap hero"><div><h1>청년사무실청소용 일정 조율 샘플</h1><p class="lead">사무실 정기청소와 바닥 관리 고객에게 보낼 희망 방문 시간 요청 문구, 확정 안내, D-1 리마인드 예시입니다.</p></div><div class="actions"><a class="button" href="mailto:yprite0128@gmail.com?subject=일정비서 청년사무실청소 샘플 확인&body=청년사무실청소 샘플 확인했습니다.%0A프리미엄 테스트 안내를 받고 싶습니다.%0A%0A업체명:%0A연락처:%0A월 평균 일정 조율 건수:">프리미엄 테스트 요청</a><a class="button secondary" href="../premium-schedule-template.csv">월 정리 시트 보기</a></div></div></header>
+    <main class="wrap">
+      <section class="grid"><article class="panel highlight"><h2>고객에게 보낼 요청 문구</h2><div class="message">안녕하세요. 청년사무실청소입니다.
+사무실 정기청소 방문 일정 조율차 연락드립니다.
+
+아래 시간 중 가능하신 번호를 답장으로 보내주세요.
+1. 이번 주 월요일 오후 1시
+2. 이번 주 수요일 오전 9시
+3. 이번 주 금요일 오후 5시
+
+출입 가능 시간이나 현장 담당자 연락처가 다르면 함께 보내주세요.</div></article><article class="panel"><h2>고객 답장 후 확정 문구</h2><div class="message">청년사무실청소입니다.
+사무실 정기청소 방문 일정은 이번 주 수요일 오전 9시로 확정하겠습니다.
+
+방문 전 변동이 있으면 이 번호로 답장 부탁드립니다.
+감사합니다.</div></article></section>
+      <section class="grid"><article class="panel"><h2>D-1 리마인드</h2><div class="message">안녕하세요. 청년사무실청소입니다.
+내일 오전 9시에 사무실 정기청소 방문 예정입니다.
+
+출입, 주차, 현장 담당자 변경사항이 있으면 이 문자로 답장 부탁드립니다.</div></article><article class="panel"><h2>프리미엄 전환 시 포함</h2><ul><li>정기청소 고객별 반복 문구 세팅</li><li>D-1 방문 리마인드 문구</li><li>월 확정 건수 정리용 CSV 시트</li><li>월 4,900원 프리미엄 테스트</li></ul></article></section>
+      <section class="panel"><h2>월 확정 건수 정리 예시</h2><table><thead><tr><th>고객</th><th>서비스</th><th>확정일</th><th>상태</th></tr></thead><tbody><tr><td>강남 사무실 A</td><td>주 1회 정기청소</td><td>수요일 09:00</td><td>확정</td></tr><tr><td>가산 사무실 B</td><td>바닥 왁싱</td><td>금요일 17:00</td><td>D-1 안내 대기</td></tr></tbody></table></section>
+    </main>
+  </body>
+</html>
